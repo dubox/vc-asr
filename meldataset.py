@@ -82,16 +82,16 @@ class MelDataset(torch.utils.data.Dataset):
         wave, sr = sf.read(wave_path)
 
         # phonemize the text
-        ps = self.g2p(text.replace('-', ' '))
+        ps = self.g2p(text.replace('-', ' ')) #这里是将素材文件里的一行文本转为音素，即word_index_dict中的 word
         print("ps",ps)
         if "'" in ps:
             ps.remove("'")
-        text = self.text_cleaner(ps)
+        text = self.text_cleaner(ps) #将音素转为index数字
         blank_index = self.text_cleaner.word_index_dictionary[" "]
         text.insert(0, blank_index) # add a blank at the beginning (silence)
         text.append(blank_index) # add a blank at the end (silence)
         
-        text = torch.LongTensor(text)
+        text = torch.LongTensor(text)#这里的text是 word_index_dict 中的index组成的数组
 
         return wave, text, speaker_id
 
